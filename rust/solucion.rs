@@ -19,6 +19,6 @@ fn main() {
     
     let duration = start.elapsed();
     
-    println!("pi = ", pi);
-    println!("Tiempo de ejecución: segundos", duration.as_secs_f64());
+    println!("pi = {}", pi);
+    println!("Tiempo de ejecución: {} segundos", duration.as_secs_f64());
 }
