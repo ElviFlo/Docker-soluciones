@@ -1,9 +1,4 @@
 #!/bin/bash
-#REPO_URL="https://github.com/ElviFlo/Docker-soluciones.git"
-#TARGET_DIR="/Soluciones"
-#mkdir -p $TARGET_DIR
-#git clone $REPO_URL $TARGET_DIR
-#cd $TARGET_DIR
 results="/app/results.csv"
 echo "Lenguaje,Tiempo (s)" > $results
 for lang in python java cpp rust javascript; do
