@@ -2,7 +2,7 @@
 
 mkdir -p outputs
 
-languages=("python" "java" "javascript" "kotlin" "rust")
+languages=("python" "java" "javascript" "cpp" "rust")
 
 temp_file="execution_times.txt"
 
