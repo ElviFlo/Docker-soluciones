@@ -2,27 +2,28 @@
 
 mkdir -p outputs
 
-languages=("python" "java" "javascript" "cpp" "rust")
+languages=("python" "java" "javascript" "kotlin" "rust")
 
-temp_file="execution_times.txt"
-
-> "$temp_file"
+declare -A execution_times
 
 for lang in "${languages[@]}"; do
     echo "Procesando $lang..."
+    cd $lang
     
     echo "Construyendo imagen para $lang..."
-    docker build -t "script_$lang" "$lang" > /dev/null 2>&1
+    docker build -t "script_$lang" .
     
     echo "Ejecutando contenedor para $lang..."
-    execution_time=$(docker run --rm "script_$lang")
+    execution_time=$(docker run --rm -v "$(pwd)/$lang:/app/$lang" "script_$lang")
+
+    execution_times[$lang]=$execution_time
     
-    echo "$execution_time $lang" >> "$temp_file"
+    cd ..
 done
 
-echo -e "\nResultados ordenados por tiempo:"
-echo "Lenguaje    | Tiempo (ms)"
-echo "------------|------------"
-sort -n "$temp_file" | awk '{ printf "%-10s | %s ms\n", $2, $1 }'
-
-rm -f "$temp_file"
+echo -e "\nResultados:"
+echo "Lenguaje | Tiempo (ms)"
+echo "---------|------------"
+for lang in "${languages[@]}"; do
+    echo "$lang | ${execution_times[$lang]}"
+done
