@@ -1,19 +1,28 @@
 #!/bin/bash
 
-results="/app/results.csv"
-echo "Lenguaje,Tiempo (s)" > $results
+mkdir -p outputs
 
-languages=("python" "java" "javascript" "cpp" "rust")
+languages=("python" "java" "javascript" "kotlin" "rust")
+
+temp_file="execution_times.txt"
+
+> "$temp_file"
 
 for lang in "${languages[@]}"; do
-    echo "Ejecutando $lang..."
-    docker build -t ${lang}-benchmark ./$lang/
-    start_time=$(date +%s%N)
-    docker run --rm ${lang}-benchmark > ./$lang/output.txt
-    end_time=$(date +%s%N)
-    elapsed_time=$(bc <<< "scale=6; ($end_time - $start_time)/1000000000")
-    echo "$lang,$elapsed_time" >> $results
+    echo "Procesando $lang..."
+    
+    echo "Construyendo imagen para $lang..."
+    docker build -t "script_$lang" "$lang" > /dev/null 2>&1
+    
+    echo "Ejecutando contenedor para $lang..."
+    execution_time=$(docker run --rm "script_$lang")
+    
+    echo "$execution_time $lang" >> "$temp_file"
 done
 
-sort -t, -k2 -n $results -o $results
-cat $results
+echo -e "\nResultados ordenados por tiempo:"
+echo "Lenguaje    | Tiempo (ms)"
+echo "------------|------------"
+sort -n "$temp_file" | awk '{ printf "%-10s | %s ms\n", $2, $1 }'
+
+rm -f "$temp_file"

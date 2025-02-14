@@ -11,8 +11,10 @@ for i in range(1, 10001):
 
 pi *= 4
 
+with open('output.txt', 'w') as file:
+    file.write(f"Valor de Pi: {pi}\n")
+
 end_time = time.time()
 execution_time = end_time - start_time
 
-print(f"pi =  {pi}")
-print(f"Tiempo de ejecución: {execution_time:.6f} segundos")
+print(f"Tiempo de ejecucion: {execution_time:.6f} segundos")
