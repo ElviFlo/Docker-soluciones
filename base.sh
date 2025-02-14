@@ -3,7 +3,7 @@
 results="/app/results.csv"
 echo "Lenguaje,Tiempo (s)" > $results
 
-languages=("python" "java" "javascript" "cpp" "rust")
+languages=("python" "java" "javascript" "cpp" "rust")
 
 for lang in "${languages[@]}"; do
     echo "Ejecutando $lang..."
